@@ -55,6 +55,16 @@ async def register_user(user_data: UserCreate, conn=Depends(get_connection)):
     return {"message": "User registered successfully"}
 
 
+@router.get("/home")
+async def home_page(request: Request):
+    # 主页逻辑
+    username = request.session.get("username")
+    if username is None:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
+    return templates.TemplateResponse("home.html", {"request": request, "username": username})
+
+
 @router.post("/apis/users/{user_id}/favorites")
 async def create_favorite(
         user_id: int, favorite_data: FavoriteCreate, conn=Depends(get_connection)

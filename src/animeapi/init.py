@@ -17,26 +17,72 @@ async def create_tables():
         database=config["database"]["database"],
     )
 
-    # 创建动漫数据表
+    # # 创建动漫数据表
+    # await conn.execute(
+    #     """
+    #     CREATE TABLE IF NOT EXISTS anime (
+    #         id SERIAL PRIMARY KEY,
+    #         type VARCHAR(255),
+    #         description TEXT,
+    #         status VARCHAR(255),
+    #         playback_link VARCHAR(255)
+    #     )
+    #     """
+    # )
+    #
+    # # 创建用户数据表
+    # await conn.execute(
+    #     """
+    #     CREATE TABLE IF NOT EXISTS users (
+    #         id SERIAL PRIMARY KEY,
+    #         username VARCHAR(255),
+    #         password VARCHAR(255)
+    #     )
+    #     """
+    # )
+
+    # 创建动漫评论postgres数据表
     await conn.execute(
         """
-        CREATE TABLE IF NOT EXISTS anime (
+        CREATE TABLE IF NOT EXISTS comments (
             id SERIAL PRIMARY KEY,
-            type VARCHAR(255),
-            description TEXT,
-            status VARCHAR(255),
-            playback_link VARCHAR(255)
+            user_id INT,
+            anime_id INT,
+            comment TEXT
         )
         """
     )
 
-    # 创建用户数据表
+    # 创建动漫评分postgres数据表
     await conn.execute(
         """
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS ratings (
             id SERIAL PRIMARY KEY,
-            username VARCHAR(255),
-            password VARCHAR(255)
+            user_id INT,
+            anime_id INT,
+            rating FLOAT
+        )
+        """
+    )
+
+    # 创建用户收藏postgres数据表
+    await conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS favorites (
+            id SERIAL PRIMARY KEY,
+            user_id INT,
+            anime_id INT
+        )
+        """
+    )
+
+    # 创建用户播放历史postgres数据表
+    await conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS play_history (
+            id SERIAL PRIMARY KEY,
+            user_id INT,
+            anime_id INT
         )
         """
     )
